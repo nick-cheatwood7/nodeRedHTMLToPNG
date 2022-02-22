@@ -1,1 +1,104 @@
-[]
+[
+    {
+        "id": "73afc3bd22354885",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "61aa36dffa915b1b",
+        "type": "inject",
+        "z": "73afc3bd22354885",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "<!DOCTYPE html><html lang=\"en\"><head> <title>C3</title> <meta charset=\"utf-8\"/> <link href=\"https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css\" rel=\"stylesheet\"/> <script src=\"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js\"></script> <script src=\"https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js\"></script> <style>.c3-region.dangerRegion{fill: red;}.c3-line{stroke-width: 5px;}</style></head><body> <div id=\"chart\"></div><script>var chart=c3.generate({padding:{top:0, bottom:0}, data:{x: 'x', columns: [ ['x', 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'], ['Thompson High', 30, 20, 100, 40, 50, 2, 0, 50, 20, 10], ['Thompson Mid', 50, 20, 10, 40, 15, 25], ['Thompson Int', 75, 10, 10, 15, 45, 60]], labels: true}, axis:{x:{type: 'category',}, y:{label:{text: 'Monthly Humidity Reading (%)', position: 'outer-middle'}, tick:{values: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}},}, regions: [{axis: 'y', start: 60, class: 'dangerRegion', label: '(Easy For Bacteria and Fungus to Grow; Excessive odor and Ethylene gas; Wasted energy)'}], legend:{position: 'right'}}); </script></body></html>",
+        "payloadType": "str",
+        "x": 110,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8b3ee0e5d8c23dd6",
+        "type": "function",
+        "z": "73afc3bd22354885",
+        "name": "",
+        "func": "\nconst image = await nodeHtmlToImage({\n    output: '/Users/nickcheatwood/.node-red/projects/nodeCanvas/chart.png',\n    html: msg.payload\n})\n\nmsg.payload = image\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "nodeHtmlToImage",
+                "module": "node-html-to-image"
+            }
+        ],
+        "x": 360,
+        "y": 220,
+        "wires": [
+            [
+                "91f0b06b47df29e2",
+                "8d06656a3ce5037e"
+            ]
+        ]
+    },
+    {
+        "id": "91f0b06b47df29e2",
+        "type": "debug",
+        "z": "73afc3bd22354885",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "67525f4745c12801",
+        "type": "http in",
+        "z": "73afc3bd22354885",
+        "name": "",
+        "url": "/charts/png",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "8b3ee0e5d8c23dd6"
+            ]
+        ]
+    },
+    {
+        "id": "8d06656a3ce5037e",
+        "type": "http response",
+        "z": "73afc3bd22354885",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "image/png"
+        },
+        "x": 520,
+        "y": 240,
+        "wires": []
+    }
+]
